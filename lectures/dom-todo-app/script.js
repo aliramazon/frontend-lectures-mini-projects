@@ -6,7 +6,7 @@
 //     },
 //     {
 //         text: "Dinner",
-//         status: "todo", // done
+//         status: "done", // done
 //         id: "3ea21f49-47d4-4e5b-b8ca-1376940c381c",
 //     },
 // ];
@@ -17,7 +17,6 @@
 //             todo.status = status;
 //         }
 //     }
-//     console.log(todos);
 // };
 
 // const deleteTodo = (id) => {
@@ -31,6 +30,7 @@
 
 //     const checkbox = document.createElement("input");
 //     checkbox.setAttribute("type", "checkbox");
+
 //     if (status === "done") {
 //         li.style.textDecoration = "line-through";
 //         checkbox.checked = true;
@@ -47,12 +47,12 @@
 
 //     checkbox.addEventListener("change", (e) => {
 //         if (checkbox.checked) {
-//             li.style.textDecoration = "line-through";
 //             changeTodoStatus(id, "done");
 //         } else {
-//             li.style.textDecoration = "none";
 //             changeTodoStatus(id, "todo");
 //         }
+
+//         renderTodos();
 //     });
 
 //     li.appendChild(checkbox);
@@ -134,12 +134,12 @@ class TodoApp {
 
         checkbox.addEventListener("change", (e) => {
             if (checkbox.checked) {
-                li.style.textDecoration = "line-through";
                 this.changeTodoStatus(id, "done");
             } else {
-                li.style.textDecoration = "none";
                 this.changeTodoStatus(id, "todo");
             }
+
+            this.renderTodos();
         });
 
         li.appendChild(checkbox);
@@ -154,7 +154,7 @@ class TodoApp {
         }
     };
 
-    submit = () => {
+    initForm = () => {
         const form = document.querySelector("form");
 
         form.addEventListener("submit", (event) => {
@@ -171,13 +171,12 @@ class TodoApp {
             input.value = "";
 
             this.renderTodos();
-            console.log(this.todos);
         });
     };
 
     init = () => {
         this.renderTodos();
-        this.submit();
+        this.initForm();
     };
 }
 

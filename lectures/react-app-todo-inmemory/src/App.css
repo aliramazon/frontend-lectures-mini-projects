@@ -16,3 +16,33 @@ input {
 .todo--done {
     text-decoration: line-through;
 }
+
+.form-control input,
+.form-control span {
+    display: block;
+}
+
+.form-control span {
+    color: red;
+}
+
+form {
+    display: flex;
+    gap: 20px;
+}
+
+.modal {
+    height: 300px;
+    width: 300px;
+    background-color: yellow;
+    z-index: 2;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

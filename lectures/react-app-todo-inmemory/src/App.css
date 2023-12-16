@@ -13,7 +13,7 @@ input {
     gap: 30px;
 }
 
-.todo--done {
+.todo__text--done {
     text-decoration: line-through;
 }
 
@@ -31,18 +31,6 @@ form {
     gap: 20px;
 }
 
-.modal {
-    height: 300px;
-    width: 300px;
-    background-color: yellow;
-    z-index: 2;
-
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.edit-form {
+    padding: 50px;
 }

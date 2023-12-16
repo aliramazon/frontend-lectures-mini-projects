@@ -1,5 +1,7 @@
 import React from "react";
 import { v4 as uuid } from "uuid";
+import Dialog from "@mui/material/Dialog";
+import { DialogTitle } from "@mui/material";
 import "./App.css";
 
 class App extends React.Component {
@@ -125,6 +127,10 @@ class App extends React.Component {
         });
     };
 
+    closeModal = () => {
+        this.setState({ showEditModal: false });
+    };
+
     render() {
         return (
             <main>
@@ -145,13 +151,16 @@ class App extends React.Component {
                     {this.state.todos.length >= 1 &&
                         this.state.todos.map((todo) => {
                             return (
-                                <li
-                                    key={todo.id}
-                                    className={`todo ${
-                                        todo.isDone ? "todo--done" : ""
-                                    }`}
-                                >
-                                    <span>{todo.text}</span>
+                                <li key={todo.id} className="todo">
+                                    <span
+                                        className={
+                                            todo.isDone
+                                                ? "todo__text--done"
+                                                : ""
+                                        }
+                                    >
+                                        {todo.text}
+                                    </span>
 
                                     <input
                                         type="checkbox"
@@ -178,15 +187,22 @@ class App extends React.Component {
                         })}
                 </ul>
 
-                {this.state.showEditModal && (
-                    <div className="modal">
+                <Dialog
+                    open={this.state.showEditModal}
+                    onClose={this.closeModal}
+                >
+                    <div className="edit-form">
+                        <DialogTitle id="alert-dialog-title">
+                            Edit Todo
+                        </DialogTitle>
                         <input
                             value={this.state.inputEditValue}
                             onChange={this.handleInputEdit}
                         />
+                        <button onClick={this.closeModal}>Cancel</button>
                         <button onClick={this.submitEdit}> Update Todo</button>
                     </div>
-                )}
+                </Dialog>
             </main>
         );
     }

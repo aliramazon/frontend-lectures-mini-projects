@@ -16,52 +16,77 @@ class App extends React.Component {
     }
 
     async componentDidMount() {
+        this.setState({
+            loading: true,
+        });
         try {
-            this.setState({
-                loading: true,
-            });
             const result = await ImageApi.fetchImages(this.state.page);
-
-            this.setState({
-                images: result,
-                loading: false,
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    loadMore = async () => {
-        try {
-            this.setState({
-                loading: true,
-            });
-            const nextPage = this.state.page + 1;
-            const result = await ImageApi.fetchImages(nextPage);
 
             this.setState((prevState) => {
                 return {
-                    images: [...prevState.images, ...result],
-                    page: nextPage,
+                    images: result,
                     loading: false,
                 };
             });
         } catch (error) {
             console.log(error);
         }
+    }
 
-        // this.setState(async (prevState) => {
-        //     const nextPage = prevState.page + 1;
+    componentDidUpdate(_, prevState) {
+        if (prevState.page !== this.state.page) {
+            this.fetchImages();
+        }
+    }
 
-        //     const result = await ImageApi.fetchImages(nextPage);
-        //     console.log(result);
+    fetchImages = async () => {
+        try {
+            const result = await ImageApi.fetchImages(this.state.page);
 
-        //     return {
-        //         page: nextPage,
-        //         images: [...prevState.images, ...result],
-        //     };
-        // });
+            this.setState((prevState) => {
+                return {
+                    images: [...prevState.images, ...result],
+                    loading: false,
+                };
+            });
+        } catch (error) {
+            console.log(error);
+        }
     };
+    loadMore = () => {
+        this.setState((prevState) => {
+            return {
+                loading: true,
+                page: prevState.page + 1,
+            };
+        });
+    };
+
+    // loadMore = async () => {
+    //     this.setState(
+    //         (prevState) => {
+    //             return {
+    //                 loading: true,
+    //                 page: prevState.page + 1,
+    //             };
+    //         },
+    //         () => {
+    //             this.fetchImages();
+    //         }
+    //     );
+
+    //     // this.setState(async (prevState) => {
+    //     //     const nextPage = prevState.page + 1;
+
+    //     //     const result = await ImageApi.fetchImages(nextPage);
+    //     //     console.log(result);
+
+    //     //     return {
+    //     //         page: nextPage,
+    //     //         images: [...prevState.images, ...result],
+    //     //     };
+    //     // });
+    // };
 
     zoomInImage = (image) => {
         this.setState({
@@ -73,7 +98,7 @@ class App extends React.Component {
     hideImage = () => {
         this.setState({
             showImage: false,
-            zoomInImage: {},
+            zoomedInImage: {},
         });
     };
 

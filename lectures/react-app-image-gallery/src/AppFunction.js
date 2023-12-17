@@ -3,6 +3,27 @@ import { ImageApi } from "./api";
 
 import "./App.css";
 
+const convertToSmallerVersion = (url) => {
+    let countSlash = 0;
+    let sliceSlashIdx = null;
+    for (let i = url.length - 1; i >= 0; i--) {
+        const char = url[i];
+        if (char === "/") {
+            countSlash++;
+            sliceSlashIdx = i;
+            if (countSlash === 2) {
+                break;
+            }
+        }
+    }
+    console.log(sliceSlashIdx);
+    console.log(url);
+
+    const finalUrl = `${url.slice(0, sliceSlashIdx)}/300/200`;
+    console.log(finalUrl);
+    return finalUrl;
+};
+
 const AppFunction = () => {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -59,7 +80,9 @@ const AppFunction = () => {
                         return (
                             <figure key={image.id}>
                                 <img
-                                    src={image.download_url}
+                                    src={convertToSmallerVersion(
+                                        image.download_url
+                                    )}
                                     alt={image.author}
                                     onClick={() => zoomInImage(image)}
                                 />

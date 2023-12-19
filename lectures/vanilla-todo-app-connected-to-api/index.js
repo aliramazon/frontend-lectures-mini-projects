@@ -1,7 +1,10 @@
 class TodoAPI {
+    constructor() {
+        this.endpoint = "https://todo-app-express-mongodb-prisma.onrender.com";
+    }
     async create(text) {
         try {
-            const response = await fetch("http://localhost:4000/tasks", {
+            const response = await fetch(`${this.endpoint}/tasks`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -23,7 +26,7 @@ class TodoAPI {
     }
     async getAll() {
         try {
-            const response = await fetch("http://localhost:4000/tasks");
+            const response = await fetch(`${this.endpoint}/tasks`);
             if (!response.ok) {
                 throw new Error(response.error);
             }
@@ -36,7 +39,7 @@ class TodoAPI {
 
     async deleteOne(id) {
         try {
-            const response = await fetch(`http://localhost:4000/tasks/${id}`, {
+            const response = await fetch(`${this.endpoint}/tasks/${id}`, {
                 method: "DELETE",
             });
 
@@ -51,7 +54,7 @@ class TodoAPI {
 
     async updateStatus(id, status) {
         try {
-            const response = await fetch(`http://localhost:4000/tasks/${id}`, {
+            const response = await fetch(`${this.endpoint}/tasks/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

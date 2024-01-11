@@ -1,18 +1,24 @@
 import { todoApi } from "./api/todo";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import { Form } from "./Form";
-import "./App.css";
 import { Todos } from "./Todos";
+import { todoReducer } from "./todoReducer";
+import "./App.css";
 
 const App = () => {
-    const [todos, setTodos] = useState([]);
     const [todoInputValue, setTodoInputValue] = useState("");
+    const [todos, dispatch] = useReducer(todoReducer, []);
 
     useEffect(() => {
         todoApi
             .getAll()
             .then((response) => {
-                setTodos(response.data);
+                dispatch({
+                    type: "INIT",
+                    payload: {
+                        data: response.data,
+                    },
+                });
             })
             .catch((err) => {
                 console.log(err);
@@ -33,8 +39,9 @@ const App = () => {
             .create(todoInputValue)
             .then((response) => {
                 setTodoInputValue("");
-                setTodos((prevTodos) => {
-                    return [...prevTodos, response.data];
+                dispatch({
+                    type: "ADD_TODO",
+                    payload: { data: response.data },
                 });
             })
             .catch((err) => {
@@ -46,30 +53,14 @@ const App = () => {
         todoApi
             .updateStatus(id, status)
             .then((_) => {
-                setTodos((prevTodos) => {
-                    /* 
-                    const updatedTodos = prevTodos.map((todo) => {
-                        if (todo.id === id) {
-                            const copy = { ...todo };
-                            copy.status = status;
-                            return copy;
-                        }
-                        return todo;
-                    });
-                    return updatedTodos;
-                    */
-                    const copyTodos = [];
-                    for (let i = 0; i < todos.length; i++) {
-                        const todo = todos[i];
-                        if (todo.id === id) {
-                            const copy = { ...todo };
-                            copy.status = status;
-                            copyTodos.push(copy);
-                        } else {
-                            copyTodos.push(todo);
-                        }
-                    }
-                    return copyTodos;
+                dispatch({
+                    type: "UPDATE_TODO",
+                    payload: {
+                        data: {
+                            id: id,
+                            status: status,
+                        },
+                    },
                 });
             })
             .catch((err) => {
@@ -81,8 +72,13 @@ const App = () => {
         todoApi
             .deleteOne(id)
             .then(() => {
-                setTodos((prevTodos) => {
-                    return prevTodos.filter((todo) => todo.id !== id);
+                dispatch({
+                    type: "DELETE_TODO",
+                    payload: {
+                        data: {
+                            id: id,
+                        },
+                    },
                 });
             })
             .catch((err) => {
